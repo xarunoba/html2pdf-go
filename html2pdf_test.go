@@ -303,12 +303,42 @@ func TestErrorScenarios(t *testing.T) {
 		{
 			name: "Resource Exhaustion",
 			html: `<html><script>
-				const array = [];
-				for(let i=0; i<10000; i++) {
-					array.push(new Array(1000).fill('test'));
+				// Create a memory leak by keeping references in a closure
+				function createLeak() {
+					let leak = [];
+					setInterval(() => {
+						for(let i = 0; i < 1000; i++) {
+							leak.push(new Array(1000).join('x'));
+						}
+					}, 10);
+				}
+				createLeak();
+				// Add CPU intensive task
+				let start = Date.now();
+				while(Date.now() - start < 3000) {
+					Math.random() * Math.random();
 				}
 			</script></html>`,
-			wantErr: false,
+			wantErr: true,
+		},
+		{
+			name: "Stack Overflow",
+			html: `<html><script>
+				function recurse() { recurse(); }
+				recurse();
+			</script></html>`,
+			wantErr: true,
+		},
+		{
+			name: "DOM Memory Leak",
+			html: `<html><script>
+				setInterval(() => {
+					document.body.appendChild(
+						document.createElement('div')
+					).innerHTML = 'x'.repeat(10000);
+				}, 1);
+			</script></html>`,
+			wantErr: true,
 		},
 	}
 
