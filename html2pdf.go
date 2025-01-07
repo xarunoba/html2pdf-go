@@ -80,7 +80,7 @@ type (
 
 func defaultConfig() config {
 	return config{
-		numWorkers: runtime.NumCPU(),
+		numWorkers: 1,
 		pdfDefaults: pdfConfig{
 			paperWidth:        8.5,
 			paperHeight:       11,
@@ -103,7 +103,7 @@ func defaultConfig() config {
 
 // WithWorkers sets the number of concurrent Chrome workers.
 // The number must be positive, otherwise it will be ignored.
-// If n <= 0, the default number of workers (CPU count) is used.
+// If n <= 0, the default number of workers (1) is used.
 func WithWorkers(n int) Option {
 	return func(c *Converter) {
 		if n > 0 {
