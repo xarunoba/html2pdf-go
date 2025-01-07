@@ -75,7 +75,7 @@ For more usage examples, please check the [examples](/examples/) directory.
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| WithWorkers | Number of concurrent Chrome tabs | Number of CPU cores |
+| WithWorkers | Number of concurrent Chrome tabs | 1 |
 | WithTimeout | Maximum time for conversion | 60 seconds |
 | WithRetryAttempts | Number of retry attempts | 3 |
 | WithRetryDelay | Delay between retries | 1 second |
